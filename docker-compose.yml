@@ -43,3 +43,18 @@ services:
     tty: true
     init: true
     entrypoint: ["node", "dist/index.js"]
+
+  openclaw-email-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.email-gateway
+    environment:
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      RESEND_WEBHOOK_SECRET: ${RESEND_WEBHOOK_SECRET}
+      BOT_EMAIL: ${BOT_EMAIL}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN}
+    ports:
+      - "3000:3000"
+    init: true
+    restart: unless-stopped

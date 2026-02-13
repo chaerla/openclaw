@@ -1,0 +1,17 @@
+{
+  "gateway": { "mode": "local" },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "openai/gpt-4o"
+      }
+    }
+  },
+  "channels": {
+    "email": {
+      "resendApiKey": "${RESEND_API_KEY}",
+      "webhookSecret": "${RESEND_WEBHOOK_SECRET}",
+      "from": "${BOT_EMAIL}"
+    }
+  }
+}
