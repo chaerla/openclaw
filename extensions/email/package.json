@@ -1,0 +1,35 @@
+{
+  "name": "@openclaw/email",
+  "version": "2026.2.1",
+  "description": "OpenClaw email channel (Resend inbound/outbound)",
+  "type": "module",
+  "dependencies": {
+    "resend": "^4.8.0",
+    "svix": "^1.85.0"
+  },
+  "devDependencies": {
+    "openclaw": "workspace:*"
+  },
+  "peerDependencies": {
+    "openclaw": "*"
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "channel": {
+      "id": "email",
+      "label": "Email",
+      "selectionLabel": "Email (Resend)",
+      "docsPath": "/channels/email",
+      "docsLabel": "email",
+      "blurb": "Reply by email via Resend Send API.",
+      "order": 100
+    },
+    "install": {
+      "npmSpec": "@openclaw/email",
+      "localPath": "extensions/email",
+      "defaultChoice": "npm"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+# OpenClaw Email Gateway - Fly.io deployment template
+# Orchestrator copies this and sets app name dynamically
+
+app = "REPLACE_WITH_APP_NAME"
+primary_region = "iad"
+
+[build]
+image = "docker.io/openclaw/openclaw-email-gateway:latest"
+
+[env]
+NODE_ENV = "production"
+OPENCLAW_STATE_DIR = "/data"
+NODE_OPTIONS = "--max-old-space-size=1024"
+
+[http_service]
+internal_port = 3000
+force_https = true
+auto_stop_machines = false
+auto_start_machines = true
+min_machines_running = 1
+
+[[vm]]
+size = "shared-cpu-1x"
+memory = "1024mb"
+
+[mounts]
+source = "openclaw_data"
+destination = "/data"

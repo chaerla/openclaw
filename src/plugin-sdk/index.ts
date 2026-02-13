@@ -371,3 +371,24 @@ export type { ProcessedLineMessage } from "../line/markdown-to-line.js";
 
 // Media utilities
 export { loadWebMedia, type WebMediaResult } from "../web/media.js";
+
+// Inbound message handling (for webhook handlers)
+export { loadConfig } from "../config/config.js";
+export {
+  resolveAgentRoute,
+  type ResolvedAgentRoute,
+  type RoutePeer,
+} from "../routing/resolve-route.js";
+export { dispatchInboundMessage, type DispatchInboundResult } from "../auto-reply/dispatch.js";
+export {
+  createReplyDispatcher,
+  type ReplyDispatcher,
+  type ReplyDispatcherOptions,
+} from "../auto-reply/reply/reply-dispatcher.js";
+export {
+  routeReply,
+  type RouteReplyParams,
+  type RouteReplyResult,
+} from "../auto-reply/reply/route-reply.js";
+export type { MsgContext, FinalizedMsgContext } from "../auto-reply/templating.js";
+export type { OutboundDeliveryResult } from "../infra/outbound/deliver.js";

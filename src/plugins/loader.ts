@@ -42,15 +42,15 @@ const registryCache = new Map<string, PluginRegistry>();
 
 const defaultLogger = () => createSubsystemLogger("plugins");
 
-const resolvePluginSdkAlias = (): string | null => {
+const resolveOpenClawAlias = (srcPath: string, distPath: string): string | null => {
   try {
     const modulePath = fileURLToPath(import.meta.url);
     const isDistRuntime = modulePath.split(path.sep).includes("dist");
     const preferDist = process.env.VITEST || process.env.NODE_ENV === "test" || isDistRuntime;
     let cursor = path.dirname(modulePath);
     for (let i = 0; i < 6; i += 1) {
-      const srcCandidate = path.join(cursor, "src", "plugin-sdk", "index.ts");
-      const distCandidate = path.join(cursor, "dist", "plugin-sdk", "index.js");
+      const srcCandidate = path.join(cursor, "src", srcPath);
+      const distCandidate = path.join(cursor, "dist", distPath);
       const orderedCandidates = preferDist
         ? [distCandidate, srcCandidate]
         : [srcCandidate, distCandidate];
@@ -70,6 +70,9 @@ const resolvePluginSdkAlias = (): string | null => {
   }
   return null;
 };
+
+const resolvePluginSdkAlias = (): string | null =>
+  resolveOpenClawAlias("plugin-sdk/index.ts", "plugin-sdk/index.js");
 
 function buildCacheKey(params: {
   workspaceDir?: string;
@@ -206,14 +209,14 @@ export function loadOpenClawPlugins(options: PluginLoadOptions = {}): PluginRegi
   pushDiagnostics(registry.diagnostics, manifestRegistry.diagnostics);
 
   const pluginSdkAlias = resolvePluginSdkAlias();
+  const aliases: Record<string, string> = {};
+  if (pluginSdkAlias) {
+    aliases["openclaw/plugin-sdk"] = pluginSdkAlias;
+  }
   const jiti = createJiti(import.meta.url, {
     interopDefault: true,
     extensions: [".ts", ".tsx", ".mts", ".cts", ".mtsx", ".ctsx", ".js", ".mjs", ".cjs", ".json"],
-    ...(pluginSdkAlias
-      ? {
-          alias: { "openclaw/plugin-sdk": pluginSdkAlias },
-        }
-      : {}),
+    ...(Object.keys(aliases).length > 0 ? { alias: aliases } : {}),
   });
 
   const manifestByRoot = new Map(
